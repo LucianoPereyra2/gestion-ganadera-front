@@ -66,7 +66,6 @@
     </q-dialog>
   </q-page>
 </template>
-
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import type { QTableColumn } from 'quasar';
@@ -75,9 +74,12 @@ import { useClienteStore } from 'stores/cliente';
 import type { LoteResponseDto } from 'src/models/Lote/LoteResponseDto';
 import LoteCreate from 'src/components/Lote/LoteCreate.vue';
 import { notificarError } from 'src/utils/notificar';
+import { useEspecieAnimalStore } from 'stores/especieAnimal';
 
 const loteStore = useLotesStore();
 const clienteStore = useClienteStore();
+const especieStore = useEspecieAnimalStore();
+const estados = ['EnEspera', 'EnCorral', 'Pesado', 'Retirado'];
 
 const filtro = ref('');
 const mostrarFormulario = ref(false);
@@ -89,9 +91,23 @@ const columns: QTableColumn<LoteResponseDto>[] = [
   { name: 'id', label: 'Id', field: 'id', align: 'left', sortable: true },
   { name: 'codigo', label: 'Código', field: 'codigo', align: 'left', sortable: true },
   { name: 'cantidadCabezas', label: 'Cantidad de cabezas', field: 'cantidadCabezas', align: 'left', sortable: true },
-  { name: 'especie', label: 'Especie', field: 'especie', align: 'left', sortable: true },
+  {
+    name: 'especieAnimalId',
+    label: 'Especie',
+    field: 'especieAnimalId',
+    align: 'left',
+    sortable: true,
+    format: (val: number) => especieStore.especies.find((e) => e.id === val)?.nombre ?? String(val),
+  },
   { name: 'categoria', label: 'Categoría', field: 'categoria', align: 'left', sortable: true },
-  { name: 'estado', label: 'Estado', field: 'estado', align: 'left', sortable: true },
+  {
+    name: 'estado',
+    label: 'Estado',
+    field: 'estado',
+    align: 'left',
+    sortable: true,
+    format: (val: number) => estados[val] ?? String(val),
+  },
   { name: 'fechaHoraIngreso', label: 'Fecha de ingreso', field: 'fechaHoraIngreso', align: 'left', sortable: true },
   { name: 'fechaHoraEgreso', label: 'Fecha de egreso', field: 'fechaHoraEgreso', align: 'left', sortable: true },
   {
@@ -145,5 +161,6 @@ async function eliminar() {
 onMounted(() => {
   recargar();
   void clienteStore.fetchAll();
+  void especieStore.fetchAll();
 });
 </script>

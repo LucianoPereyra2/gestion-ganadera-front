@@ -11,12 +11,12 @@ export const useMovimientoLoteStore = defineStore('movimientoLote', () => {
   const loading = ref(false);
   const error = ref<string | null>(null);
 
-  /** GET api/MovimientoLotes/All */
+  /** GET api/MovimientosLote/All */
   async function fetchAll() {
     loading.value = true;
     error.value = null;
     try {
-      const { data } = await api.get<MovimientoLoteResponseDto[]>('/MovimientoLotes/All');
+      const { data } = await api.get<MovimientoLoteResponseDto[]>('/MovimientosLote/All');
       movimientoLotes.value = data;
     } catch (e) {
       movimientoLotes.value = [];
@@ -32,11 +32,11 @@ export const useMovimientoLoteStore = defineStore('movimientoLote', () => {
     }
   }
 
-  /** GET api/MovimientoLotes/ById?Id=... Devuelve el movimientoLote o null si no existe. */
+  /** GET api/MovimientosLote/ById?Id=... */
   async function fetchById(id: number): Promise<MovimientoLoteResponseDto | null> {
     loading.value = true;
     try {
-      const { data } = await api.get<MovimientoLoteResponseDto>(`/MovimientoLotes/ById?Id=${id}`);
+      const { data } = await api.get<MovimientoLoteResponseDto>(`/MovimientosLote/ById?Id=${id}`);
       return data;
     } catch {
       return null;
@@ -45,33 +45,33 @@ export const useMovimientoLoteStore = defineStore('movimientoLote', () => {
     }
   }
 
-  /** POST api/MovimientoLotes */
+  /** POST api/MovimientosLote */
   async function create(movimientoLote: MovimientoLoteRequestDto) {
     loading.value = true;
     try {
-      await api.post('/MovimientoLotes', movimientoLote);
+      await api.post('/MovimientosLote', movimientoLote);
       notificarExito('MovimientoLote creado');
     } finally {
       loading.value = false;
     }
   }
 
-  /** PUT api/MovimientoLotes?Id=... */
+  /** PUT api/MovimientosLote?Id=... */
   async function update(id: number, movimientoLote: MovimientoLoteRequestDto) {
     loading.value = true;
     try {
-      await api.put(`/MovimientoLotes?Id=${id}`, movimientoLote);
+      await api.put(`/MovimientosLote?Id=${id}`, movimientoLote);
       notificarExito('MovimientoLote modificado');
     } finally {
       loading.value = false;
     }
   }
 
-  /** DELETE api/MovimientoLotes?Id=... (se llama borrar porque delete es palabra reservada) */
+  /** DELETE api/MovimientosLote?Id=... */
   async function borrar(id: number) {
     loading.value = true;
     try {
-      await api.delete(`/MovimientoLotes?Id=${id}`);
+      await api.delete(`/MovimientosLote?Id=${id}`);
       notificarExito('MovimientoLote eliminado');
     } finally {
       loading.value = false;

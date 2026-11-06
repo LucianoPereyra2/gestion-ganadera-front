@@ -1,7 +1,7 @@
 export interface PesajeResponseDto {
     id: number;
     pesoNeto: number;
-    tipoPesaje: string;
+    tipoPesaje: number;
     fechaHora: string;
     observaciones: string;
     loteId: number;

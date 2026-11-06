@@ -1,6 +1,6 @@
 export interface PesajeRequestDto {
     pesoNeto: number;
-    tipoPesaje: string;
+    tipoPesaje: number;
     fechaHora: string;
     observaciones: string;
     loteId: number;

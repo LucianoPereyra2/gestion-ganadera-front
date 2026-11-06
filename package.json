@@ -1,9 +1,9 @@
 {
-  "name": "biblioteca2026",
+ "name": "gestion-ganadera",
   "version": "0.0.1",
-  "description": "Aplicación para cursada de EDI 3 2026",
-  "productName": "BibliotecaApp",
-  "author": "Luis Osar Gonzalez <gonzalezluisoscar393@gmail.com>",
+  "description": "Aplicación de Gestión Ganadera",
+  "productName": "GestionGanadera",
+  "author": "Luciano Pereyra <lucianopereyra1204@gmail.com>",
   "type": "module",
   "private": true,
   "scripts": {

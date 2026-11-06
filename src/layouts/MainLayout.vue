@@ -95,7 +95,19 @@ const linksList: EssentialLinkProps[] = [
     caption: 'Listado de pesajes',
     icon: 'scale',
     link: '/pesajes'
-  }
+  },
+  {
+  title: 'Especies',
+  caption: 'Listado de especies',
+  icon: 'pets',
+  link: '/especies'
+},
+{
+  title: 'Sector',
+  caption: 'Listado de sectores',
+  icon: 'domain',
+  link: '/sectores'
+}
 ];
 
 const leftDrawerOpen = ref(false);
