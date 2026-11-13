@@ -1,4 +1,4 @@
-// Espejo de Libros.Application.Dtos.Login.LoginUserRequestDto
+// Espejo de GestionGanadera.Application.Dtos.Login.LoginUserRequestDto
 export interface LoginUserRequestDto {
   email: string
   password: string

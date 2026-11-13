@@ -70,12 +70,13 @@
 import { onMounted, ref } from 'vue';
 import type { QTableColumn } from 'quasar';
 import { useMovimientoLoteStore } from 'stores/movimientoLote';
+import { useLotesStore } from 'stores/lotes';
 import type { MovimientoLoteResponseDto } from 'src/models/MovimientoLote/MovimientoLoteResponseDto';
 import MovimientoLoteCreate from 'src/components/MovimientoLote/MovimientoLoteCreate.vue';
 import { notificarError } from 'src/utils/notificar';
 
 const movimientoLoteStore = useMovimientoLoteStore();
-const estados = ['EnEspera', 'EnCorral', 'Pesado', 'Retirado'];
+const loteStore = useLotesStore();
 
 const filtro = ref('');
 const mostrarFormulario = ref(false);
@@ -91,15 +92,14 @@ const columns: QTableColumn<MovimientoLoteResponseDto>[] = [
     field: 'estadoAnterior',
     align: 'left',
     sortable: true,
-    format: (val: number) => estados[val] ?? String(val),
-  },
+    format: (val: number) => loteStore.estadosList.find((e) => e.id === val)?.nombre ?? String(val),  },
   {
     name: 'estadoNuevo',
     label: 'Estado nuevo',
     field: 'estadoNuevo',
     align: 'left',
     sortable: true,
-    format: (val: number) => estados[val] ?? String(val),
+    format: (val: number) => loteStore.estadosList.find((e) => e.id === val)?.nombre ?? String(val),
   },
   { name: 'fechaHora', label: 'Fecha y hora', field: 'fechaHora', align: 'left', sortable: true },
   { name: 'observaciones', label: 'Observaciones', field: 'observaciones', align: 'left', sortable: true },
@@ -146,5 +146,6 @@ async function eliminar() {
 
 onMounted(() => {
   recargar();
+  void loteStore.fetchEstadoSelectList();
 });
 </script>

@@ -94,8 +94,8 @@ const columns: QTableColumn<PesajeResponseDto>[] = [
     field: 'tipoPesaje',
     align: 'left',
     sortable: true,
-    format: (val: number) => (val === 0 ? 'Entrada' : 'Salida'),
-
+    format: (val: number) => pesajeStore.tiposList.find((t) => t.id === val)?.nombre ?? String(val),
+    
   },  { name: 'fechaHora', label: 'Fecha y Hora', field: 'fechaHora', align: 'left', sortable: true },
 
   {name: 'observaciones', label: 'Observaciones', field: 'observaciones', align: 'left', sortable: true },
@@ -144,5 +144,6 @@ async function eliminar() {
 
 onMounted(() => {
   recargar();
+  void pesajeStore.fetchTipoPesajeSelectList();
 });
 </script>

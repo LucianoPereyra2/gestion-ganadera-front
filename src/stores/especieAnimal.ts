@@ -4,10 +4,12 @@ import { isAxiosError } from 'axios';
 import { api } from 'boot/axios';
 import type { EspecieAnimalResponseDto } from 'src/models/EspecieAnimal/EspecieAnimalResponseDto';
 import type { EspecieAnimalRequestDto } from 'src/models/EspecieAnimal/EspecieAnimalRequestDto';
+import type { EspecieAnimalSelectListDto } from 'src/models/EspecieAnimal/EspecieAnimalSelectListDto';
 import { notificarExito } from 'src/utils/notificar';
 
 export const useEspecieAnimalStore = defineStore('especieAnimal', () => {
   const especies = ref<EspecieAnimalResponseDto[]>([]);
+  const especiesList = ref<EspecieAnimalSelectListDto[]>([]);
   const loading = ref(false);
   const error = ref<string | null>(null);
 
@@ -27,6 +29,18 @@ export const useEspecieAnimalStore = defineStore('especieAnimal', () => {
       } else {
         error.value = 'Error inesperado al obtener las especies';
       }
+    } finally {
+      loading.value = false;
+    }
+  }
+  /** GET api/EspeciesAnimales/GetSelectList */
+    async function fetchSelectList() {
+    loading.value = true;
+    error.value = null;
+    try {
+      const res = await api.get<EspecieAnimalSelectListDto[]>('/EspeciesAnimales/GetSelectList');
+      especiesList.value = res.data ?? [];
+      return res.data;
     } finally {
       loading.value = false;
     }
@@ -78,5 +92,4 @@ export const useEspecieAnimalStore = defineStore('especieAnimal', () => {
     }
   }
 
-  return { especies, loading, error, fetchAll, fetchById, create, update, borrar };
-});
+  return { especies, especiesList, loading, error, fetchAll, fetchSelectList, fetchById, create, update, borrar };});

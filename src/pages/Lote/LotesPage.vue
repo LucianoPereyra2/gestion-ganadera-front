@@ -79,7 +79,6 @@ import { useEspecieAnimalStore } from 'stores/especieAnimal';
 const loteStore = useLotesStore();
 const clienteStore = useClienteStore();
 const especieStore = useEspecieAnimalStore();
-const estados = ['EnEspera', 'EnCorral', 'Pesado', 'Retirado'];
 
 const filtro = ref('');
 const mostrarFormulario = ref(false);
@@ -97,8 +96,7 @@ const columns: QTableColumn<LoteResponseDto>[] = [
     field: 'especieAnimalId',
     align: 'left',
     sortable: true,
-    format: (val: number) => especieStore.especies.find((e) => e.id === val)?.nombre ?? String(val),
-  },
+    format: (val: number) => especieStore.especiesList.find((e) => e.id === val)?.nombre ?? String(val),  },
   { name: 'categoria', label: 'Categoría', field: 'categoria', align: 'left', sortable: true },
   {
     name: 'estado',
@@ -106,8 +104,7 @@ const columns: QTableColumn<LoteResponseDto>[] = [
     field: 'estado',
     align: 'left',
     sortable: true,
-    format: (val: number) => estados[val] ?? String(val),
-  },
+    format: (val: number) => loteStore.estadosList.find((e) => e.id === val)?.nombre ?? String(val),    },
   { name: 'fechaHoraIngreso', label: 'Fecha de ingreso', field: 'fechaHoraIngreso', align: 'left', sortable: true },
   { name: 'fechaHoraEgreso', label: 'Fecha de egreso', field: 'fechaHoraEgreso', align: 'left', sortable: true },
   {
@@ -116,8 +113,7 @@ const columns: QTableColumn<LoteResponseDto>[] = [
     field: 'clienteId',
     align: 'left',
     sortable: true,
-    format: (val: number) => clienteStore.clientes.find((c) => c.id === val)?.razonSocial ?? String(val),
-  },
+    format: (val: number) => clienteStore.clientesList.find((c) => c.id === val)?.nombre ?? String(val),  },
   { name: 'acciones', label: 'Acciones', field: 'id', align: 'right', sortable: false },
 ];
 
@@ -160,7 +156,7 @@ async function eliminar() {
 
 onMounted(() => {
   recargar();
-  void clienteStore.fetchAll();
-  void especieStore.fetchAll();
-});
+  void clienteStore.fetchSelectList();
+  void especieStore.fetchSelectList();});
+  void loteStore.fetchEstadoSelectList();
 </script>

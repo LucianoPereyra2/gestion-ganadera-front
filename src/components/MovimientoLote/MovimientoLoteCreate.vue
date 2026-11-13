@@ -7,9 +7,9 @@
 
     <q-card-section>
       <q-form ref="formRef" greedy @submit.prevent="onSubmit">
-        <q-select v-model="form.estadoAnterior" :options="estados" label="Estado anterior" outlined emit-value
+        <q-select v-model="form.estadoAnterior" :options="estadoOptions" label="Estado anterior" outlined emit-value
           map-options class="q-mb-sm" />
-        <q-select v-model="form.estadoNuevo" :options="estados" label="Estado nuevo" outlined emit-value
+        <q-select v-model="form.estadoNuevo" :options="estadoOptions" label="Estado nuevo" outlined emit-value
           map-options class="q-mb-sm" />
         <q-input v-model="form.fechaHora" label="Fecha y hora" type="datetime-local" outlined stack-label class="q-mb-sm" lazy-rules
           :rules="[(v: string) => !!v || 'Ingresá la fecha y hora']" />
@@ -36,12 +36,7 @@ import { useLotesStore } from 'stores/lotes';
 import type { MovimientoLoteRequestDto } from 'src/models/MovimientoLote/MovimientoLoteRequestDto';
 import { notificarError } from 'src/utils/notificar';
 
-const estados = [
-  { label: 'EnEspera', value: 0 },
-  { label: 'EnCorral', value: 1 },
-  { label: 'Pesado', value: 2 },
-  { label: 'Retirado', value: 3 },
-];
+
 
 const props = defineProps<{ editId: number | null }>();
 const emit = defineEmits<{ (e: 'close'): void }>();
@@ -60,18 +55,22 @@ const form = ref<MovimientoLoteRequestDto>({
 });
 
 const loteOptions = computed(() =>
-  loteStore.lotes.map((l) => ({ label: l.codigo ? `${l.codigo} (Id: ${l.id})` : `Lote ${l.id}`, value: l.id })),
+  loteStore.lotesList.map((l) => ({ label: l.nombre, value: l.id })),
+);
+
+const estadoOptions = computed(() =>
+  loteStore.estadosList.map((e) => ({ label: e.nombre, value: e.id })),
 );
 
 const aInput = (v: string) => (v ? v.slice(0, 16) : '');
 const aApi = (v: string) => (v && v.length === 16 ? `${v}:00` : v);
 
 onMounted(async () => {
-  await loteStore.fetchAll();
+  await loteStore.fetchSelectList();
   if (props.editId) {
     const m = await movimientoLoteStore.fetchById(props.editId);
     if (m) {
-      const lote = loteStore.lotes.find((l) => String(l.codigo) === String(m.codigoLote));
+      const lote = loteStore.lotesList.find((l) => l.nombre === m.codigoLote);
       form.value = {
         estadoAnterior: m.estadoAnterior,
         estadoNuevo: m.estadoNuevo,
@@ -83,7 +82,6 @@ onMounted(async () => {
     }
   }
 });
-
 async function onSubmit() {
   const valido = await formRef.value?.validate();
   if (!valido) {

@@ -1,4 +1,4 @@
-# BibliotecaApp (biblioteca2026)
+# GestionGanaderaApp (gestion-ganadera)
 
 Aplicación para cursada de EDI 3 2026
 

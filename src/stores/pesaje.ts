@@ -4,10 +4,12 @@ import { isAxiosError } from 'axios';
 import { api } from 'boot/axios';
 import type { PesajeResponseDto } from 'src/models/Pesaje/PesajeResponseDto';
 import type { PesajeRequestDto } from 'src/models/Pesaje/PesajeRequestDto';
+import type { TipoPesajeSelectListDto } from 'src/models/Pesaje/TipoPesajeSelectListDto';
 import { notificarExito } from 'src/utils/notificar';
 
 export const usePesajeStore = defineStore('pesaje', () => {
   const pesajes = ref<PesajeResponseDto[]>([]);
+  const tiposList = ref<TipoPesajeSelectListDto[]>([]);
   const loading = ref(false);
   const error = ref<string | null>(null);
 
@@ -27,6 +29,18 @@ export const usePesajeStore = defineStore('pesaje', () => {
       } else {
         error.value = 'Error inesperado al obtener los pesajes';
       }
+    } finally {
+      loading.value = false;
+    }
+  }
+
+    async function fetchTipoPesajeSelectList() {
+    loading.value = true;
+    error.value = null;
+    try {
+      const res = await api.get<TipoPesajeSelectListDto[]>('/Pesajes/GetTipoPesajeSelectList');
+      tiposList.value = res.data ?? [];
+      return res.data;
     } finally {
       loading.value = false;
     }
@@ -78,5 +92,5 @@ export const usePesajeStore = defineStore('pesaje', () => {
     }
   }
 
-  return { pesajes, loading, error, fetchAll, fetchById, create, update, borrar };
+  return { pesajes, tiposList, fetchTipoPesajeSelectList, loading, error, fetchAll, fetchById, create, update, borrar };
 });

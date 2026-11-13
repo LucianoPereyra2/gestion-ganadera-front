@@ -11,7 +11,7 @@
           :rules="[(v: number) => (v !== null && v !== undefined && v > 0) || 'Ingresá un peso mayor a 0']" />
 
 
-          <q-select v-model="form.tipoPesaje" :options="entrada" label="Ingrese tipo de pesaje" outlined emit-value
+          <q-select v-model="form.tipoPesaje" :options="tipoOptions" label="Ingrese tipo de pesaje" outlined emit-value
           map-options class="q-mb-sm"/>
           
 
@@ -47,10 +47,7 @@ const pesajeStore = usePesajeStore();
 const loteStore = useLotesStore();
 const formRef = ref<QForm | null>(null);
 
-const entrada = [
-  { label: 'Entrada', value: 0 },
-  { label: 'Salida', value: 1 },
-];
+
 const form = ref<PesajeRequestDto>({
   pesoNeto: 0,
    tipoPesaje: 0,
@@ -60,14 +57,19 @@ const form = ref<PesajeRequestDto>({
 });
 
 const loteOptions = computed(() =>
-  loteStore.lotes.map((l) => ({ label: l.codigo ? `${l.codigo} (Id: ${l.id})` : `Lote ${l.id}`, value: l.id })),
+  loteStore.lotesList.map((l) => ({ label: l.nombre, value: l.id })),
+);
+
+const tipoOptions = computed(() =>
+  pesajeStore.tiposList.map((t) => ({ label: t.nombre, value: t.id })),
 );
 
 const aInput = (v: string) => (v ? v.slice(0, 16) : '');
 const aApi = (v: string) => (v && v.length === 16 ? `${v}:00` : v);
 
 onMounted(async () => {
-  await loteStore.fetchAll();
+  await pesajeStore.fetchTipoPesajeSelectList();
+  await loteStore.fetchSelectList();
   if (props.editId) {
     const p = await pesajeStore.fetchById(props.editId);
     if (p) {

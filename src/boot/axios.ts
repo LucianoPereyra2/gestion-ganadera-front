@@ -9,7 +9,7 @@ declare module 'vue' {
   }
 }
 
-// Instancia de axios apuntando a la API de Biblioteca.
+// Instancia de axios apuntando a la API de Gestión Ganadera.
 // Los stores importan `api` directamente; `$api` queda disponible en los componentes.
 const api = axios.create({
   baseURL: 'https://localhost:7169/api',

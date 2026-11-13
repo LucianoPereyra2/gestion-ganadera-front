@@ -196,7 +196,7 @@ export default defineConfig((/* ctx */) => {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'biblioteca2026'
+        appId: 'gestionganadera'
       }
     },
 

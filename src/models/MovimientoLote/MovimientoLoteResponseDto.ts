@@ -5,5 +5,5 @@ export interface MovimientoLoteResponseDto {
   fechaHora: string;
   observaciones: string;
   personaResponsable: string;
-  codigoLote: number;
+  codigoLote: string;
 }

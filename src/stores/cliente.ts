@@ -4,12 +4,14 @@ import { isAxiosError } from 'axios';
 import { api } from 'boot/axios';
 import type { ClienteResponseDto } from 'src/models/Cliente/ClienteResponseDto';
 import type { ClienteRequestDto } from 'src/models/Cliente/ClienteRequestDto';
+import type { ClienteSelectListDto } from 'src/models/Cliente/ClienteSelectListDto';
 import { notificarExito } from 'src/utils/notificar';
 
 export const useClienteStore = defineStore('cliente', () => {
   const clientes = ref<ClienteResponseDto[]>([]);
   const loading = ref(false);
   const error = ref<string | null>(null);
+  const clientesList = ref<ClienteSelectListDto[]>([]);
 
   /** GET api/Clientes/All */
   async function fetchAll() {
@@ -27,6 +29,19 @@ export const useClienteStore = defineStore('cliente', () => {
       } else {
         error.value = 'Error inesperado al obtener los clientes';
       }
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  /** GET api/Clientes/SelectList */
+    async function fetchSelectList() {
+    loading.value = true;
+    error.value = null;
+    try {
+      const res = await api.get<ClienteSelectListDto[]>('/Clientes/GetSelectList');
+      clientesList.value = res.data ?? [];
+      return res.data;
     } finally {
       loading.value = false;
     }
@@ -78,5 +93,4 @@ export const useClienteStore = defineStore('cliente', () => {
     }
   }
 
-  return { clientes, loading, error, fetchAll, fetchById, create, update, borrar };
-});
+  return { clientes, clientesList, loading, error, fetchAll, fetchSelectList, fetchById, create, update, borrar };});

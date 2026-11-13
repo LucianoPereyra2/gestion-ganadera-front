@@ -64,7 +64,7 @@ const verPassword = ref(false);
 async function onSubmit() {
   const ok = await auth.login(credenciales.value);
   if (ok) {
-    await router.push('/'); // al home; desde ahi el usuario navega a Autores
+    await router.push('/'); 
   }
 }
 </script>
